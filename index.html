@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Father's Day, Michael</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #02050f;
+            --card-bg: rgba(6, 17, 28, 0.75);
+            --starlight: #e0f7fa;
+            --ethereal-blue: #00d2ff;
+            --gold: #d4af37;
+            --text: #e0e6ed;
+            --hex-border: rgba(0, 210, 255, 0.4);
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text);
+            font-family: 'Space Mono', monospace;
+            height: 100vh;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* --- Sci-Fi Boot Screen --- */
+        #boot-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-color);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .boot-container {
+            text-align: center;
+        }
+
+        .boot-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 2rem;
+            color: var(--ethereal-blue);
+            filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.5));
+            transition: transform 0.5s ease, color 0.5s ease;
+        }
+
+        #boot-screen:hover .boot-logo {
+            transform: scale(1.1);
+            color: var(--gold);
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+        }
+
+        .boot-text {
+            color: var(--starlight);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            animation: pulseText 2s infinite;
+        }
+
+        @keyframes pulseText {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .starfleet-delta {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- Deep Space Parallax Background --- */
+        .space-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #061122 0%, #010205 100%);
+        }
+
+        #starfield-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .nebula {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, rgba(0, 0, 0, 0) 60%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+
+
+        /* --- Cinematic Sci-Fi Intro --- */
+        #intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .hud-text {
+            color: var(--starlight);
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 3px;
+            margin: 12px 0;
+            text-shadow: 0 0 15px rgba(0, 210, 255, 0.6);
+            opacity: 0;
+            font-weight: 300;
+        }
+
+        .typewriter {
+            display: inline-block;
+            width: max-content;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: .15em solid transparent;
+        }
+
+
+
+        .baba-jie-intro {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 3.5rem;
+            letter-spacing: 12px;
+            margin-top: 2rem;
+            opacity: 0;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+        }
+
+
+
+
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--ethereal-blue);
+            }
+        }
+
+        @keyframes slowFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .begin-btn {
+            margin-top: 2rem;
+            background: transparent;
+            border: none;
+            color: var(--ethereal-blue);
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0;
+        }
+
+
+
+        .begin-btn svg {
+            width: 180px;
+            height: auto;
+            stroke: var(--ethereal-blue);
+            fill: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 4px rgba(0, 210, 255, 0.4));
+        }
+
+        .begin-btn .warp-trail {
+            stroke-dasharray: 10, 10;
+            stroke-dashoffset: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .begin-btn span {
+            margin-top: 1rem;
+            transition: all 0.5s ease;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        .begin-btn:hover {
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .begin-btn:hover svg {
+            stroke: #fff;
+            filter: drop-shadow(0 0 15px var(--ethereal-blue)) drop-shadow(0 0 5px var(--ethereal-blue));
+            transform: translateY(-5px);
+        }
+
+        .begin-btn:hover .bussard {
+            stroke: #ff3333;
+            filter: drop-shadow(0 0 8px #ff3333);
+        }
+
+        .begin-btn:hover .nacelle-glow {
+            stroke: var(--ethereal-blue);
+            filter: drop-shadow(0 0 8px var(--ethereal-blue));
+        }
+
+        .begin-btn:hover .warp-trail {
+            opacity: 0.8;
+            animation: warpStreams 1.5s linear infinite;
+        }
+
+        .begin-btn:hover span {
+            text-shadow: 0 0 20px var(--ethereal-blue), 0 0 5px #fff;
+            letter-spacing: 12px;
+        }
+
+        @keyframes warpStreams {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: -40;
+            }
+        }
+
+        /* --- Main Content Card --- */
+        #mainContent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateZ(-800px) scale(0.9);
+            transition: opacity 2.5s ease-in-out, transform 3.5s cubic-bezier(0.19, 1, 0.22, 1);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #mainContent.active {
+            opacity: 1;
+            transform: translateZ(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--hex-border);
+            border-radius: 8px;
+            padding: 3rem 2.5rem;
+            max-width: 500px;
+            width: 85%;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 210, 255, 0.15), inset 0 0 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Magical glowing corners */
+        .card::before,
+        .card::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--ethereal-blue);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .card::before {
+            top: 15px;
+            left: 15px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .card::after {
+            bottom: 15px;
+            right: 15px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .model-container {
+            width: 100%;
+            max-width: 220px;
+            margin: 0 auto 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+            background-color: #000;
+            position: relative;
+        }
+
+        .model-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+        }
+
+        .model-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 4s ease;
+            filter: contrast(1.1) brightness(1.1);
+        }
+
+        .card:hover .model-container img {
+            transform: scale(1.08);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--starlight);
+            font-size: 2.4rem;
+            margin: 0 0 0.5rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .chinese-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            letter-spacing: 8px;
+            margin-bottom: 2rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .message {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            color: #b8cddb;
+            text-align: center;
+        }
+
+        .message span.highlight {
+            color: var(--ethereal-blue);
+            font-weight: 600;
+        }
+
+        .footer {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--starlight);
+            letter-spacing: 3px;
+            border-top: 1px solid rgba(0, 210, 255, 0.2);
+            padding-top: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .date {
+            font-size: 0.8rem;
+            color: var(--gold);
+            margin-top: 1.2rem;
+            letter-spacing: 5px;
+            opacity: 0.9;
+        }
+
+        /* Transporter beam scanning visual */
+        #boot-screen.beaming::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    rgba(0, 210, 255, 0) 0%,
+                    rgba(0, 210, 255, 0.15) 30%,
+                    rgba(255, 255, 255, 0.45) 50%,
+                    rgba(0, 210, 255, 0.15) 70%,
+                    rgba(0, 210, 255, 0) 100%);
+            background-size: 100% 200%;
+            animation: beamScan 2.5s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes beamScan {
+            0% {
+                background-position: 0% -200%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                background-position: 0% 200%;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sci-Fi Boot Screen overlay -->
+    <div id="boot-screen" onclick="bootSystem()">
+        <div class="boot-container">
+            <div class="boot-logo">
+                <svg viewBox="0 0 100 100" class="starfleet-delta">
+                    <path d="M 50,15 L 80,75 C 80,75 50,65 50,65 C 50,65 20,75 20,75 Z" fill="none"
+                        stroke="currentColor" stroke-width="2" />
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="1"
+                        stroke-dasharray="3,3" />
+                </svg>
+            </div>
+            <div class="boot-text">> CLICK TO INITIALIZE SYSTEM COMMAND</div>
+        </div>
+    </div>
+
+    <div class="space-container">
+        <div class="nebula"></div>
+        <canvas id="starfield-canvas"></canvas>
+    </div>
+
+    <!-- Magical Sci-Fi Intro -->
+    <div id="intro">
+        <div class="hud-text typewriter delay-1">> TUNING TO CELESTIAL FREQUENCY 88...</div>
+        <div class="hud-text typewriter delay-2">> TRACING A JOURNEY ACROSS THE STARS...</div>
+        <div class="hud-text typewriter delay-3">> HAPPY 88 MICHAEL...</div>
+        <div class="baba-jie-intro">爸爸节</div>
+        <button class="begin-btn" onclick="initiateWarp()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" class="enterprise-svg">
+                <!-- Saucer Section -->
+                <circle cx="150" cy="70" r="45" stroke-width="1.5" />
+                <circle cx="150" cy="70" r="28" stroke-width="1" stroke-dasharray="3,3" />
+                <circle cx="150" cy="70" r="8" stroke-width="1.5" />
+
+                <!-- Secondary Hull -->
+                <path d="M 148,110 L 148,125 M 152,110 L 152,125" stroke-width="1.5" />
+                <path d="M 143,125 C 143,125 138,150 144,165 L 156,165 C 162,150 157,125 157,125 Z"
+                    stroke-width="1.5" />
+                <circle cx="150" cy="128" r="3" stroke-width="1" />
+
+                <!-- Warp Nacelles & Pylons -->
+                <path d="M 144,150 L 90,135" stroke-width="1.5" />
+                <path d="M 156,150 L 210,135" stroke-width="1.5" />
+
+                <!-- Left Nacelle -->
+                <rect x="85" y="60" width="8" height="85" rx="4" stroke-width="1.5" />
+                <path class="bussard" d="M 85,63 C 85,55 93,55 93,63" stroke-width="1.5" />
+                <line class="nacelle-glow" x1="89" y1="70" x2="89" y2="135" stroke-width="1" />
+
+                <!-- Right Nacelle -->
+                <rect x="207" y="60" width="8" height="85" rx="4" stroke-width="1.5" />
+                <path class="bussard" d="M 207,63 C 207,55 215,55 215,63" stroke-width="1.5" />
+                <line class="nacelle-glow" x1="211" y1="70" x2="211" y2="135" stroke-width="1" />
+
+                <!-- Warp Trails -->
+                <line class="warp-trail" x1="89" y1="150" x2="89" y2="195" stroke-width="1" />
+                <line class="warp-trail" x1="211" y1="150" x2="211" y2="195" stroke-width="1" />
+                <line class="warp-trail" x1="150" y1="170" x2="150" y2="195" stroke-width="0.75" />
+            </svg>
+            <span>Engage</span>
+        </button>
+    </div>
+
+    <!-- Main Card -->
+    <div id="mainContent">
+        <div class="card">
+            <div class="model-container">
+                <img src="dad.jpg" alt="Dad">
+            </div>
+            <h1>Michael</h1>
+            <div class="chinese-title">父親節快樂</div>
+
+            <div class="message">
+                Like the sacred geometry of the cosmos, your journey across space and time, built a beautiful universe
+                for our family.<br><br>
+                Thank you for being our hero, our steady gravity, and our guiding star. May you continue to <span
+                    class="highlight">live long and prosper.</span>
+            </div>
+
+            <div class="footer">
+                WITH INFINITE LOVE,<br>
+                TINA & BRIAN
+            </div>
+            <div class="date">
+                STAR DATE 8.8 // BA BA JIE
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let linesText = [];
+
+        // Save original text content and hide elements on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.typewriter');
+            elements.forEach(el => {
+                linesText.push(el.textContent.trim());
+                el.textContent = '';
+                el.style.opacity = '0';
+            });
+            // Initialize canvas
+            initStarfield();
+        });
+
+        // --- Canvas Starfield System ---
+        let canvas, ctx;
+        let width, height;
+        let centerX, centerY;
+        const numStars = 180;
+        const stars = [];
+        const maxDepth = 1000;
+        let currentSpeed = 0.8; // initial drift speed
+        let targetSpeed = 0.8;
+
+        function initStarfield() {
+            canvas = document.getElementById('starfield-canvas');
+            ctx = canvas.getContext('2d');
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            centerX = width / 2;
+            centerY = height / 2;
+
+            // Initialize stars
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: (Math.random() - 0.5) * width * 2,
+                    y: (Math.random() - 0.5) * height * 2,
+                    z: Math.random() * maxDepth,
+                    color: getStarColor()
+                });
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                centerX = width / 2;
+                centerY = height / 2;
+            });
+
+            // Start loop
+            requestAnimationFrame(updateAndDrawStars);
+        }
+
+        function getStarColor() {
+            const colors = ['#ffffff', '#e0f7fa', '#00d2ff', '#d4af37'];
+            const r = Math.random();
+            if (r < 0.65) return colors[0]; // white
+            if (r < 0.80) return colors[1]; // light cyan
+            if (r < 0.93) return colors[2]; // ethereal blue
+            return colors[3]; // gold
+        }
+
+        function updateAndDrawStars() {
+            // If warping, use a lower opacity clear to leave longer trails
+            if (currentSpeed > 15) {
+                ctx.fillStyle = 'rgba(2, 5, 15, 0.08)'; // long neon trails
+            } else {
+                ctx.fillStyle = 'rgba(2, 5, 15, 0.22)'; // normal drift motion blur
+            }
+            ctx.fillRect(0, 0, width, height);
+
+            // Smooth speed transitions
+            currentSpeed += (targetSpeed - currentSpeed) * 0.04;
+
+            const focalLength = 320;
+
+            for (let i = 0; i < numStars; i++) {
+                const star = stars[i];
+                const prevZ = star.z;
+
+                // Move star closer
+                star.z -= currentSpeed;
+
+                // Reset star if it goes past screen
+                if (star.z <= 0) {
+                    star.x = (Math.random() - 0.5) * width * 2;
+                    star.y = (Math.random() - 0.5) * height * 2;
+                    star.z = maxDepth;
+                    continue;
+                }
+
+                // Project current 3D position to 2D
+                const px = (star.x / star.z) * focalLength + centerX;
+                const py = (star.y / star.z) * focalLength + centerY;
+
+                // Project previous 3D position to 2D for trail
+                const ppx = (star.x / prevZ) * focalLength + centerX;
+                const ppy = (star.y / prevZ) * focalLength + centerY;
+
+                // Skip drawing if out of bounds
+                if (px < 0 || px > width || py < 0 || py > height) {
+                    continue;
+                }
+
+                // Line thickness based on depth (closer = thicker)
+                let thickness = (1 - star.z / maxDepth) * 2.2 + 0.4;
+                if (currentSpeed > 15) {
+                    thickness = (1 - star.z / maxDepth) * 3.5 + 0.6; // thicker lines during warp
+                }
+
+                ctx.beginPath();
+                ctx.moveTo(ppx, ppy);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = star.color;
+                ctx.lineWidth = thickness;
+                ctx.lineCap = 'round';
+
+                // Add glowing glow effect on warp speeds
+                if (currentSpeed > 15) {
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = star.color;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(updateAndDrawStars);
+        }
+
+        // --- Audio Synthesis and control ---
+        function playRetroClick() {
+            try {
+                if (!audioCtx) return;
+
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(500, audioCtx.currentTime + 0.03);
+
+                gainNode.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch (e) {
+                console.log("Audio synthesis error:", e);
+            }
+        }
+
+        function playTransporterEffect() {
+            try {
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
+                const duration = 2.5; // Transporter beam duration
+
+                // 1. Low hum drone (base beam hum)
+                const humOsc = audioCtx.createOscillator();
+                const humGain = audioCtx.createGain();
+                humOsc.type = 'sine';
+                humOsc.frequency.setValueAtTime(95, now);
+                humOsc.frequency.linearRampToValueAtTime(105, now + duration);
+
+                humGain.gain.setValueAtTime(0.001, now);
+                humGain.gain.linearRampToValueAtTime(0.15, now + 0.4);
+                humGain.gain.setValueAtTime(0.15, now + duration - 0.5);
+                humGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                humOsc.connect(humGain);
+                humGain.connect(audioCtx.destination);
+
+                // 2. Shimmering high pitch warble (iconic transporter sound)
+                const shimmerOsc = audioCtx.createOscillator();
+                const shimmerGain = audioCtx.createGain();
+                shimmerOsc.type = 'sine';
+                shimmerOsc.frequency.setValueAtTime(900, now);
+
+                // LFO to modulate the frequency of the shimmer oscillator for the warble effect
+                const lfo = audioCtx.createOscillator();
+                const lfoGain = audioCtx.createGain();
+                lfo.frequency.value = 16; // 16Hz warble
+                lfoGain.gain.value = 150; // modulate by +/- 150Hz
+
+                lfo.connect(lfoGain);
+                lfoGain.connect(shimmerOsc.frequency);
+
+                shimmerOsc.frequency.linearRampToValueAtTime(1200, now + duration);
+
+                shimmerGain.gain.setValueAtTime(0.001, now);
+                shimmerGain.gain.linearRampToValueAtTime(0.07, now + 0.5);
+                shimmerGain.gain.setValueAtTime(0.07, now + duration - 0.5);
+                shimmerGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                shimmerOsc.connect(shimmerGain);
+                shimmerGain.connect(audioCtx.destination);
+
+                lfo.start(now);
+                shimmerOsc.start(now);
+                humOsc.start(now);
+
+                lfo.stop(now + duration);
+                shimmerOsc.stop(now + duration);
+                humOsc.stop(now + duration);
+            } catch (e) {
+                console.log("Transporter synthesis error:", e);
+            }
+        }
+
+        let transporterSoundObj = null;
+
+        function playTransporterSound() {
+            transporterSoundObj = new Audio('transporter.mp3');
+            transporterSoundObj.volume = 0.55;
+            transporterSoundObj.play().catch(err => {
+                console.log("transporter.mp3 play blocked or not found, fallback to synthesis...");
+                playTransporterEffect();
+            });
+        }
+
+        function fadeOutAudio(audioElement, durationMs) {
+            try {
+                const startVolume = audioElement.volume;
+                const steps = 20;
+                const intervalTime = durationMs / steps;
+                let currentStep = 0;
+                
+                const fadeInterval = setInterval(() => {
+                    currentStep++;
+                    const newVolume = startVolume * (1 - (currentStep / steps));
+                    if (newVolume <= 0) {
+                        audioElement.volume = 0;
+                        audioElement.pause();
+                        clearInterval(fadeInterval);
+                    } else {
+                        audioElement.volume = newVolume;
+                    }
+                }, intervalTime);
+            } catch (e) {
+                console.log("Audio fade out error:", e);
+                audioElement.pause();
+            }
+        }
+
+        function typeWriter(element, text, speedMs, delayMs, onComplete) {
+            setTimeout(() => {
+                element.style.opacity = '1';
+                element.classList.add('blink');
+
+                let current = 0;
+                const interval = setInterval(() => {
+                    if (current >= text.length) {
+                        clearInterval(interval);
+                        if (onComplete) onComplete();
+                        return;
+                    }
+                    element.textContent += text[current];
+                    if (text[current] !== ' ') {
+                        playRetroClick();
+                    }
+                    current++;
+                }, speedMs);
+            }, delayMs);
+        }
+
+        function startIntroSequence() {
+            const bootScreen = document.getElementById('boot-screen');
+            
+            // 1. Trigger transporter scanning visual scan line overlay
+            bootScreen.classList.add('beaming');
+
+            // 2. Play local transporter.mp3 or synthesize it dynamically!
+            playTransporterSound();
+
+            // 3. Fade out boot screen overlay and transporter sound towards the end of the transporter beam
+            setTimeout(() => {
+                bootScreen.style.opacity = '0';
+                
+                // Fade out the transporter audio volume smoothly over 800ms
+                if (transporterSoundObj && !transporterSoundObj.paused) {
+                    fadeOutAudio(transporterSoundObj, 800);
+                }
+            }, 2200);
+
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+
+                const elements = document.querySelectorAll('.typewriter');
+
+                // Start typewriter animations and sync audio precisely (60ms per character)
+                // Starts right after boot screen is gone (at 3000ms total from start of transporter)
+                typeWriter(elements[0], linesText[0], 60, 0);       // Line 1 starts immediately
+                typeWriter(elements[1], linesText[1], 60, 2500);    // Line 2 starts after 2.5s
+                typeWriter(elements[2], linesText[2], 60, 5000);    // Line 3 starts after 5s
+
+                // Caret cleanup intervals to match when the next lines start
+                setTimeout(() => {
+                    elements[0].classList.remove('blink');
+                }, 2500); // Remove caret from line 1 when line 2 starts
+
+                setTimeout(() => {
+                    elements[1].classList.remove('blink');
+                }, 5000); // Remove caret from line 2 when line 3 starts
+
+                setTimeout(() => {
+                    elements[2].classList.remove('blink');
+                }, 7500); // Remove caret from line 3 when intro heading fades in
+
+                // Start the fade-in for baba-jie-intro and begin-btn
+                const babaIntro = document.querySelector('.baba-jie-intro');
+                if (babaIntro) {
+                    babaIntro.style.animation = 'slowFadeIn 3s 7.5s forwards';
+                }
+
+                const beginBtn = document.querySelector('.begin-btn');
+                if (beginBtn) {
+                    beginBtn.style.animation = 'slowFadeIn 2s 10s forwards';
+                }
+            }, 3000);
+        }
+
+        function bootSystem() {
+            // Initialize Audio Context after user click
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                audioCtx = new AudioContext();
+            }
+
+            // Play incoming transmission sound
+            const transmission = new Audio('incomingtransmission.mp3');
+            transmission.volume = 0.6;
+            
+            // Listen to ended event to start the transporter beam
+            transmission.onended = () => {
+                startIntroSequence();
+            };
+
+            transmission.play().then(() => {
+                // Update boot text visually
+                const bootTextEl = document.querySelector('.boot-text');
+                if (bootTextEl) {
+                    bootTextEl.textContent = '> RECEIVING INCOMING TRANSMISSION...';
+                }
+            }).catch(err => {
+                // If incomingtransmission.mp3 is not found or fails, skip immediately to transporter!
+                console.log("incomingtransmission.mp3 not found or blocked, skipping directly to transporter...");
+                startIntroSequence();
+            });
+        }
+
+        function initiateWarp() {
+            const intro = document.getElementById('intro');
+            const mainContent = document.getElementById('mainContent');
+
+            // Play engage sound
+            const engageSound = new Audio('engage.mp3');
+            engageSound.volume = 0.6;
+            engageSound.play().catch(e => console.log("Engage sound play blocked:", e));
+
+            // Accelerate canvas stars into warp speed!
+            targetSpeed = 100;
+
+            // Fade out intro HUD
+            intro.style.opacity = '0';
+
+            // Wait for intro to fade, then reveal the card
+            setTimeout(() => {
+                intro.style.display = 'none';
+                mainContent.classList.add('active');
+
+                // Play the Star Trek theme fanfare
+                const fanfareSound = new Audio('opening.mp3');
+                fanfareSound.volume = 0.55;
+                fanfareSound.play().catch(e => console.log("Fanfare play blocked:", e));
+
+                // Slowly decelerate back to gentle drift speed
+                targetSpeed = 0.8;
+            }, 1500);
+        }
+    </script>
+</body>
+
+</html>
